@@ -25,6 +25,8 @@ function displayWorks(works) {
     figure.appendChild(figcaption);
     gallery.appendChild(figure);
   });
+  //   console.log("works reçus :", works);
+  //   console.log("gallery :", galleryDynamic);
 }
 
 // 3. Lancer l'affichage
