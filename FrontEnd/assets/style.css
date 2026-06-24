@@ -241,6 +241,19 @@ li:hover {
   padding: 0.5em 2em;
   border: 1px solid rgba(29, 97, 84, 1);
   background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#filters button:hover {
+  background-color: rgba(29, 97, 84, 0.1);
+}
+
+#filters button.active {
+  background-color: #1d6154;
+  color: white;
+  border-color: #1d6154;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 #contact {

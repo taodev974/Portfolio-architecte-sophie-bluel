@@ -67,6 +67,19 @@ function setupFilters(works) {
     displayWorks(filtered);
   });
   filtersContainer.appendChild(btnHotelsAndRestautant);
+
+  // gestion bouton activé
+  const buttons = filtersContainer.querySelectorAll("button");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // 1. Retirer la classe active de tous les boutons
+      buttons.forEach((b) => b.classList.remove("active"));
+
+      // 2. Ajouter la classe active au bouton cliqué
+      btn.classList.add("active");
+    });
+  });
 }
 
 // 4. Lancer l'affichage
