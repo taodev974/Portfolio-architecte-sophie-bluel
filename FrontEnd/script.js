@@ -4,6 +4,8 @@ async function apiWorks() {
   return await response.json();
 }
 
+//
+
 // 2. Générer la galerie en dynamique
 function displayWorks(works) {
   const gallery = document.getElementById("galleryDynamic");
@@ -29,10 +31,49 @@ function displayWorks(works) {
   //   console.log("gallery :", galleryDynamic);
 }
 
-// 3. Lancer l'affichage
+// 3. Ajout des filtrres
+function setupFilters(works) {
+  const filtersContainer = document.getElementById("filters");
+
+  // bouton "Tous"
+  const btnAll = document.createElement("button");
+  btnAll.textContent = "Tous";
+  btnAll.addEventListener("click", () => displayWorks(works));
+  filtersContainer.appendChild(btnAll);
+
+  // bouton "Objets"
+  const btnObject = document.createElement("button");
+  btnObject.textContent = "Objets";
+  btnObject.addEventListener("click", () => {
+    const filtered = works.filter((w) => w.categoryId === 1);
+    displayWorks(filtered);
+  });
+  filtersContainer.appendChild(btnObject);
+
+  // bouton appartements
+  const btnApartment = document.createElement("button");
+  btnApartment.textContent = "Appartements";
+  btnApartment.addEventListener("click", () => {
+    const filtered = works.filter((w) => w.categoryId === 2);
+    displayWorks(filtered);
+  });
+  filtersContainer.appendChild(btnApartment);
+
+  // bouton hotels & restaurants
+  const btnHotelsAndRestautant = document.createElement("button");
+  btnHotelsAndRestautant.textContent = "Hotels & restaurents";
+  btnHotelsAndRestautant.addEventListener("click", () => {
+    const filtered = works.filter((w) => w.categoryId === 3);
+    displayWorks(filtered);
+  });
+  filtersContainer.appendChild(btnHotelsAndRestautant);
+}
+
+// 4. Lancer l'affichage
 async function init() {
   const works = await apiWorks();
   displayWorks(works);
+  setupFilters(works);
 }
 
 init();
