@@ -177,6 +177,18 @@ nav li {
 li:hover {
   color: #b1663c;
 }
+
+a,
+li {
+  text-decoration: none;
+  text-transform: none;
+}
+a,
+li:visited {
+  color: black;
+  text-decoration: none;
+}
+
 #introduction {
   display: flex;
   align-items: center;
@@ -243,6 +255,8 @@ li:hover {
   background-color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  font-family: "syne";
+  color: #1d6154;
 }
 
 #filters button:hover {
