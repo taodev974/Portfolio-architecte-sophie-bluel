@@ -18,6 +18,7 @@ async function apiWorks() {
     );
   }
 }
+// 2. Récuperer les catégories API
 async function apiCategories() {
   try {
     const response = await fetch("http://localhost:5678/api/categories");
@@ -36,7 +37,7 @@ async function apiCategories() {
     );
   }
 }
-// 2. Générer la galerie en dynamique
+// 3. Générer la galerie en dynamique
 function displayWorks(works) {
   const gallery = document.getElementById("galleryDynamic");
   gallery.innerHTML = ""; // Nettoyer avant d'ajouter
@@ -59,7 +60,7 @@ function displayWorks(works) {
   });
 }
 
-// 3. gestion des catégories
+// 4. gestion des catégories
 function createFilterBtn(category, works) {
   const btn = document.createElement("button");
   btn.classList.add("filter-btn");
@@ -71,7 +72,7 @@ function createFilterBtn(category, works) {
   return btn;
 }
 
-// 4. Ajout des filtrres
+// 5. Ajout des filtrres
 function setupFilters(works, categories) {
   const filtersContainer = document.getElementById("filters");
 
@@ -101,7 +102,7 @@ function setupFilters(works, categories) {
   });
 }
 
-// 4. Lancer l'affichage
+// 6. Lancer l'affichage
 async function init() {
   const works = await apiWorks();
   const categories = await apiCategories();
