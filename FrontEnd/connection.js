@@ -23,22 +23,35 @@ async function apiUsersLogin(email, password) {
     return null;
   }
 }
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+
+const loginBtn = document.getElementById("login-btn");
+
+loginBtn.addEventListener("click", async (e) => {
+  e.preventDefault(); // empêche le submit classique
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const data = await apiUsersLogin(email, password);
+  try {
+    const response = await fetch("http://localhost:5678/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-  if (!data) {
-    alert("Erreur : email ou mot de passe incorrect");
-    return;
+    if (!response.ok) {
+      alert("Identifiants incorrects");
+      return;
+    }
+
+    const data = await response.json();
+
+    // Stocker le token pour le mode admin
+    localStorage.setItem("token", data.token);
+
+    // Redirection vers index.html
+    window.location.href = "index.html";
+  } catch (error) {
+    console.error("Erreur :", error);
   }
-
-  // Stocker le token
-  localStorage.setItem("token", data.token);
-
-  // Redirection vers l’index
-  window.location.href = "index.html";
 });
