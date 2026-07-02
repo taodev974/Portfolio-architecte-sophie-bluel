@@ -1,3 +1,32 @@
+// 0. Bandeau
+const token = localStorage.getItem("token");
+
+if (token) {
+  document.getElementById("admin-banner").style.display = "block";
+
+  // Transformer login → logout
+  const loginLink = document.getElementById("login-link");
+  loginLink.textContent = "logout";
+  loginLink.href = "#";
+
+  loginLink.addEventListener("click", () => {
+    // Supprimer le token
+    localStorage.removeItem("token");
+
+    // Cacher le bouton modifier
+    document.getElementById("edit-gallery").style.display = "none";
+
+    window.location.href = "index.html";
+  });
+
+  // Cacher les filtres
+  const removefilters = document.getElementById("filters");
+  removefilters.classList.add("hidden");
+
+  // Afficher Bouton Modifier
+  document.getElementById("edit-gallery").style.display = "inline-block";
+}
+
 // 1. Récupérer les works API
 async function apiWorks() {
   try {
@@ -106,8 +135,11 @@ function setupFilters(works, categories) {
 async function init() {
   const works = await apiWorks();
   const categories = await apiCategories();
-  displayWorks(works);
-  setupFilters(works, categories);
-}
 
+  displayWorks(works);
+  // Ne créer les filtres que si on est pas en mode admin
+  if (!token) {
+    setupFilters(works, categories);
+  }
+}
 window.addEventListener("DOMContentLoaded", init);

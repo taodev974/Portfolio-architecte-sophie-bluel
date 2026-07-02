@@ -16,9 +16,15 @@
     />
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="script copy.js" defer></script>
-    <!-- <script src="script.js" defer></script> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
+    <div id="admin-banner" class="admin-banner">
+      <p><i class="fa-solid fa-pen-to-square"></i> Mode édition</p>
+    </div>
     <header>
       <h1>
         <a href="index.html"
@@ -29,7 +35,7 @@
         <ul>
           <li><a href="#portfolio"> projets </a></li>
           <li><a href="#contact"> contact </a></li>
-          <li><a href="login.html"> login </a></li>
+          <li><a href="login.html" id="login-link">login</a></li>
           <li>
             <a href="https://www.instagram.com/">
               <img src="./assets/icons/instagram.png" alt="Instagram" />
@@ -63,7 +69,12 @@
         </article>
       </section>
       <section id="portfolio">
-        <h2>Mes Projets</h2>
+        <div class="title-gallery">
+          <h2>Mes Projets</h2>
+          <div id="edit-gallery" class="edit-button">
+            <i class="fa-solid fa-pen-to-square"></i>Modifier
+          </div>
+        </div>
         <div id="filters"></div>
         <div id="galleryDynamic"></div>
       </section>

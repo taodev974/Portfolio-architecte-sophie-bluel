@@ -343,7 +343,10 @@ footer nav ul {
   display: flex;
   justify-content: flex-end;
 }
-
+footer a {
+  font-size: 14px;
+  cursor: pointer;
+}
 footer {
   background-color: white;
   padding: 0em;
@@ -392,4 +395,28 @@ footer {
 #connexion a {
   text-align: center;
   text-decoration: underline;
+}
+
+/* homepage_edit */
+.admin-banner {
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  display: none; /* caché par défaut */
+  font-style: 16px;
+}
+.hidden {
+  display: none;
+}
+.edit-button {
+  display: none; /* caché par défaut */
+  cursor: pointer;
+  font-size: 14px;
+}
+.title-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  align-items: baseline;
 }
