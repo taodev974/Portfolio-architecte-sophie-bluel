@@ -109,4 +109,59 @@ async function init() {
   setupFilters(works, categories);
 }
 
+// 5. mode admin
+const token = localStorage.getItem("token");
+
+if (token) {
+  // Afficher le bandeau
+  document.getElementById("admin-banner").style.display = "block";
+  // Transformer login → logout
+  const loginLink = document.getElementById("login-link");
+  loginLink.textContent = "logout";
+  loginLink.href = "#";
+
+  loginLink.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  });
+  document.getElementById("edit-gallery").style.display = "inline-block";
+  document.getElementById("filters").style.display = "none";
+}
+
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modal-close");
+const modalAddBtn = document.getElementById("modal-add-btn");
+const modalBack = document.getElementById("modal-back");
+
+const modalGalleryView = document.getElementById("modal-gallery-view");
+const modalFormView = document.getElementById("modal-form-view");
+
+// Ouvrir la modale
+document.getElementById("edit-gallery").addEventListener("click", () => {
+  modal.style.display = "flex";
+  loadModalGallery(); // On charge les travaux dans la modale
+});
+
+// Fermer la modale
+modalClose.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Fermer en cliquant en dehors
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+modalAddBtn.addEventListener("click", () => {
+  modalGalleryView.classList.add("hidden");
+  modalFormView.classList.remove("hidden");
+});
+
+modalBack.addEventListener("click", () => {
+  modalFormView.classList.add("hidden");
+  modalGalleryView.classList.remove("hidden");
+});
+
 window.addEventListener("DOMContentLoaded", init);

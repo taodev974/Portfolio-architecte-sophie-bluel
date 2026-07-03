@@ -15,7 +15,7 @@
       content="Portfolio de Sophie Bluel : architecte d'intérieur. Découvrez ses projets, réalisations et univers créatif."
     />
     <link rel="stylesheet" href="./assets/style.css" />
-    <script src="script copy.js" defer></script>
+    <script src="script.js" defer></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -91,8 +91,56 @@
           <input type="submit" value="Envoyer" />
         </form>
       </section>
-    </main>
 
+      <!-- ===================== MODALE ===================== -->
+      <div id="modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+          <!-- Bouton fermeture -->
+          <span id="modal-close" class="modal-close">&times;</span>
+
+          <!-- ===================== VUE GALERIE ===================== -->
+          <div id="modal-gallery-view">
+            <h3>Galerie photo</h3>
+
+            <!-- Galerie interne de la modale -->
+            <div id="modal-gallery" class="modal-gallery"></div>
+
+            <!-- Bouton pour passer au formulaire -->
+            <button id="modal-add-btn" class="modal-btn">
+              Ajouter une photo
+            </button>
+          </div>
+
+          <!-- ===================== VUE FORMULAIRE ===================== -->
+          <div id="modal-form-view" class="hidden">
+            <!-- Flèche retour -->
+            <span id="modal-back" class="modal-back">&#8592;</span>
+
+            <h3>Ajout photo</h3>
+
+            <form id="modal-form">
+              <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" id="image" accept="image/*" />
+              </div>
+
+              <div class="form-group">
+                <label for="title">Titre</label>
+                <input type="text" id="title" />
+              </div>
+
+              <div class="form-group">
+                <label for="category">Catégorie</label>
+                <select id="category"></select>
+              </div>
+
+              <button type="submit" class="modal-btn">Valider</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- ===================== FIN MODALE ===================== -->
+    </main>
     <footer>
       <nav>
         <ul>
