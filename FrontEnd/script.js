@@ -1,4 +1,4 @@
-// 1. Récupérer les works / catégorie
+// 1. Récupérer les works / catégorie / delete /refresh
 async function apiWorks() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
@@ -18,6 +18,7 @@ async function apiWorks() {
     );
   }
 }
+
 async function apiCategories() {
   try {
     const response = await fetch("http://localhost:5678/api/categories");
@@ -35,6 +36,32 @@ async function apiCategories() {
       error,
     );
   }
+}
+
+async function deleteWork(id) {
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la suppression");
+    }
+
+    console.log("Projet supprimé");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function refreshGallery() {
+  const works = await apiWorks();
+
+  displayWorks(works);
+  displayModalWorks(works);
 }
 
 // 2. Générer la galerie pricipale en dynamique et la galerie dans la modale
@@ -72,9 +99,15 @@ function displayModalWorks(works) {
     img.alt = work.title;
 
     // Création de l'icône corbeille
-
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
+    deleteBtn.dataset.id = work.id;
+
+    deleteBtn.addEventListener("click", async () => {
+      // console.log(deleteBtn.dataset.id);
+      await deleteWork(work.id);
+      await refreshGallery();
+    });
 
     const trash = document.createElement("i");
     trash.classList.add("fa-solid", "fa-trash-can");

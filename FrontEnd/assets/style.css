@@ -498,4 +498,5 @@ footer {
   border-radius: 2px;
   font-size: 10px;
   cursor: pointer;
+  border: none;
 }
