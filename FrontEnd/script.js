@@ -71,7 +71,18 @@ function displayModalWorks(works) {
     img.src = work.imageUrl;
     img.alt = work.title;
 
+    // Création de l'icône corbeille
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+
+    const trash = document.createElement("i");
+    trash.classList.add("fa-solid", "fa-trash-can");
+
+    deleteBtn.appendChild(trash);
+
     figure.appendChild(img);
+    figure.appendChild(deleteBtn);
 
     gallery.appendChild(figure);
   });

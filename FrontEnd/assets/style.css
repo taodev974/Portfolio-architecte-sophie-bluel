@@ -427,7 +427,7 @@ footer {
 .modal-content {
   background: white;
   padding: 60px;
-  width: 500px;
+  width: 400px;
   border-radius: 10px;
   position: relative;
 }
@@ -459,13 +459,14 @@ footer {
 
 .modal-gallery figure {
   margin: 0;
+  position: relative;
 }
 
 .modal-gallery img {
   width: 100%;
   display: block;
   object-fit: cover;
-  height: 100px;
+  height: 90px;
 }
 
 #modal-gallery-view {
@@ -481,4 +482,20 @@ footer {
   /* transition: all 0.2s ease-in-out; */
   font-family: "syne";
   color: white;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: black;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
 }
