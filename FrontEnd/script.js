@@ -1,11 +1,11 @@
-// 1. Récupérer les works API
+// 1. Récupérer les works / catégorie
 async function apiWorks() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
 
     if (!response.ok) {
       console.warn(
-        "Une erreure est survenue lors de la récupération des travaux. Status: ${response.status}",
+        `Une erreure est survenue lors de la récupération des travaux. Status: ${response.status}`,
         JSON.stringify(response, null, 2),
       );
     }
@@ -36,7 +36,8 @@ async function apiCategories() {
     );
   }
 }
-// 2. Générer la galerie en dynamique
+
+// 2. Générer la galerie pricipale en dynamique et la galerie dans la modale
 function displayWorks(works) {
   const gallery = document.getElementById("galleryDynamic");
   gallery.innerHTML = ""; // Nettoyer avant d'ajouter
@@ -57,6 +58,27 @@ function displayWorks(works) {
     figure.appendChild(figcaption);
     gallery.appendChild(figure);
   });
+}
+
+function displayModalWorks(works) {
+  const gallery = document.getElementById("modal-gallery");
+  gallery.innerHTML = "";
+
+  works.forEach((work) => {
+    const figure = document.createElement("figure");
+
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+
+    figure.appendChild(img);
+
+    gallery.appendChild(figure);
+  });
+}
+async function loadModalGallery() {
+  const works = await apiWorks();
+  displayModalWorks(works);
 }
 
 // 3. gestion des catégories
@@ -104,6 +126,7 @@ function setupFilters(works, categories) {
 // 4. Lancer l'affichage
 async function init() {
   const works = await apiWorks();
+  console.log(works);
   const categories = await apiCategories();
   displayWorks(works);
   setupFilters(works, categories);
