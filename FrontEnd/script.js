@@ -1,4 +1,4 @@
-// 1. Récupérer les works / catégorie / delete /refresh
+// 1. Récupérer les works / catégorie / delete / Ajout / refresh
 async function apiWorks() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
@@ -55,6 +55,77 @@ async function deleteWork(id) {
   } catch (error) {
     console.error(error);
   }
+}
+
+// Charger les catégories
+async function loadCategories() {
+  const response = await fetch("http://localhost:5678/api/categories");
+  const categories = await response.json();
+
+  const select = document.getElementById("category");
+
+  categories.forEach((cat) => {
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    select.appendChild(option);
+  });
+}
+
+// Fonction déclenchée quand on change la catégorie
+function onCategoryChange(event) {
+  const selectedId = event.target.value;
+  console.log("Catégorie choisie :", selectedId);
+}
+// Ecouter le changement
+document
+  .getElementById("category")
+  .addEventListener("change", onCategoryChange);
+// Cahrger les catégories
+loadCategories();
+
+// Valider le formulaire
+document
+  .getElementById("modal-form")
+  .addEventListener("submit", validateFormModal);
+
+async function validateFormModal(e) {
+  e.preventDefault();
+
+  const category = document.getElementById("category").value;
+  const title = document.getElementById("title").value.trim();
+  const fileInput = document.getElementById("image");
+
+  if (!category || !title) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+  // construction du FormData
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("category", category);
+  formData.append("image", fileInput.files[0]);
+
+  // Envoi à l'API
+  const response = await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (response.ok) {
+    alert("Projet ajouté !");
+    // fermeture modale
+    modal.style.display = "none";
+    // rafraîchir
+    refreshGallery();
+  } else {
+    alert("Erreur lors de l'ajout.");
+  }
+  const result = await response.json();
+  console.log(result);
 }
 
 async function refreshGallery() {
@@ -170,7 +241,7 @@ function setupFilters(works, categories) {
 // 4. Lancer l'affichage
 async function init() {
   const works = await apiWorks();
-  console.log(works);
+  // console.log(works);
   const categories = await apiCategories();
   displayWorks(works);
   setupFilters(works, categories);

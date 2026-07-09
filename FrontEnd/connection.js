@@ -12,7 +12,7 @@ async function apiUsersLogin(email, password) {
 
     if (!response.ok) {
       console.warn(
-        "Identifiant incorrecte ou erreur serveur, Status: ${response.status}",
+        `Identifiant incorrecte ou erreur serveur, Status: ${response.status}`,
       );
       return null;
     }

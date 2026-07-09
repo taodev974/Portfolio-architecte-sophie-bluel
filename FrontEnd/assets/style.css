@@ -445,11 +445,11 @@ footer {
   font-size: 1.5rem;
   margin-bottom: 10px;
   display: inline-block;
+  position: absolute;
+  left: 20px;
+  top: 10px;
 }
 
-.hidden {
-  display: none;
-}
 .modal-gallery {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -469,7 +469,8 @@ footer {
   height: 90px;
 }
 
-#modal-gallery-view {
+#modal-gallery-view,
+#modal-form-view {
   text-align: center;
 }
 
@@ -499,4 +500,8 @@ footer {
   font-size: 10px;
   cursor: pointer;
   border: none;
+}
+
+.modal h3 {
+  font-size: 26px;
 }
