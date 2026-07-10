@@ -120,8 +120,25 @@
 
             <form id="modal-form">
               <div class="form-group">
-                <label for="image">Image</label>
-                <input type="file" id="image" accept="image/*" />
+                <!-- <label for="image">Image</label> -->
+
+                <div class="preview-container">
+                  <img id="image-preview" src="./assets/icons/img.png" />
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    class="hidden"
+                  />
+                  <button
+                    type="submit"
+                    id="choixImg"
+                    class="modal-btn-add-picture"
+                  >
+                    + Ajouter photo
+                  </button>
+                  <p>jpg. png : 4mo max</p>
+                </div>
               </div>
 
               <div class="form-group">

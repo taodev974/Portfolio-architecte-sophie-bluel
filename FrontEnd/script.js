@@ -72,6 +72,30 @@ async function loadCategories() {
   });
 }
 
+const fileInput = document.getElementById("image");
+const preview = document.getElementById("image-preview");
+
+// Ouvrir le sélecteur de fichier en cliquant sur l'image
+preview.addEventListener("click", () => {
+  fileInput.click();
+});
+// mettre à jour l'image quand un fichier est choisi
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    preview.classList.add("hidden");
+    preview.src = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    preview.src = e.target.result;
+    preview.classList.remove("hidden");
+  };
+  reader.readAsDataURL(file);
+});
+
 // Fonction déclenchée quand on change la catégorie
 function onCategoryChange(event) {
   const selectedId = event.target.value;
@@ -119,6 +143,7 @@ async function validateFormModal(e) {
     alert("Projet ajouté !");
     // fermeture modale
     modal.style.display = "none";
+    resetModal();
     // rafraîchir
     refreshGallery();
   } else {
@@ -276,6 +301,7 @@ const modalFormView = document.getElementById("modal-form-view");
 
 // Ouvrir la modale
 document.getElementById("edit-gallery").addEventListener("click", () => {
+  resetModal();
   modal.style.display = "flex";
   loadModalGallery(); // On charge les travaux dans la modale
 });
@@ -283,14 +309,34 @@ document.getElementById("edit-gallery").addEventListener("click", () => {
 // Fermer la modale
 modalClose.addEventListener("click", () => {
   modal.style.display = "none";
+  resetModal();
 });
 
 // Fermer en cliquant en dehors
 modal.addEventListener("click", (e) => {
   if (e.target === modal) {
     modal.style.display = "none";
+    resetModal();
   }
 });
+
+function resetModal() {
+  // 1. Revenir à la vue galerie
+  modalFormView.classList.add("hidden");
+  modalGalleryView.classList.remove("hidden");
+
+  // 2. Réinitialiser le formulaire
+  document.getElementById("modal-form").reset();
+
+  // 3. Réinitialiser l’image preview
+  const preview = document.getElementById("image-preview");
+  preview.src = "./assets/icons/img.png"; // icône par défaut
+  preview.classList.remove("hidden");
+
+  // 4. Vider l’input file
+  const fileInput = document.getElementById("image");
+  fileInput.value = "";
+}
 
 modalAddBtn.addEventListener("click", () => {
   modalGalleryView.classList.add("hidden");
