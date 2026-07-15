@@ -485,6 +485,21 @@ footer {
   color: white;
 }
 
+.modal-add-btn {
+  border-radius: 60px;
+  padding: 0.5em 2em;
+  border: 1px solid rgba(29, 97, 84, 1);
+  background-color: #a7a7a7;
+  cursor: not-allowed;
+  font-family: "syne";
+  color: white;
+}
+
+.modal-add-btn.valid {
+  background-color: #1d6154;
+  cursor: pointer;
+}
+
 .delete-btn {
   position: absolute;
   top: 5px;
@@ -540,7 +555,6 @@ select {
   border: none;
   background-color: rgba(203, 214, 220, 1);
   cursor: pointer;
-  /* transition: all 0.2s ease-in-out; */
   font-family: "syne";
   color: rgba(48, 102, 133, 1);
 }

@@ -105,6 +105,7 @@
             <!-- Galerie interne de la modale -->
             <div id="modal-gallery" class="modal-gallery"></div>
             <hr />
+            <br />
             <!-- Bouton pour passer au formulaire -->
             <button id="modal-add-btn" class="modal-btn">
               Ajouter une photo
@@ -130,14 +131,15 @@
                     accept="image/*"
                     class="hidden"
                   />
-                  <button
-                    type="submit"
-                    id="choixImg"
+                  <!-- mettre oun label ici -->
+                  <label
+                    type="file"
+                    id="label-btn"
                     class="modal-btn-add-picture"
                   >
                     + Ajouter photo
-                  </button>
-                  <p>jpg. png : 4mo max</p>
+                  </label>
+                  <p id="image-info">jpg. png : 4mo max</p>
                 </div>
               </div>
 
@@ -150,8 +152,10 @@
                 <label for="category">Catégorie</label>
                 <select id="category"></select>
               </div>
-
-              <button type="submit" id="modalBtn" class="modal-btn">
+              <br />
+              <hr />
+              <br />
+              <button type="submit" id="modalBtn" class="modal-add-btn">
                 Valider
               </button>
             </form>

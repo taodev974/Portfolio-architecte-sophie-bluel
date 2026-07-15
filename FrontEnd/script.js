@@ -16,6 +16,7 @@ async function apiWorks() {
       "une erreure est survenue lors de la récupération des travaux ",
       JSON.stringify(error, null, 2),
     );
+    // return []
   }
 }
 
@@ -74,24 +75,35 @@ async function loadCategories() {
 
 const fileInput = document.getElementById("image");
 const preview = document.getElementById("image-preview");
+const labelBtn = document.getElementById("label-btn");
+const imageInfo = document.getElementById("image-info");
 
 // Ouvrir le sélecteur de fichier en cliquant sur l'image
 preview.addEventListener("click", () => {
   fileInput.click();
 });
+// Ouvrir le selecteur de fichier en cliquant sur label
+labelBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
 // mettre à jour l'image quand un fichier est choisi
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
 
   if (!file) {
-    preview.classList.add("hidden");
-    preview.src = "";
     return;
   }
+
   const reader = new FileReader();
   reader.onload = (e) => {
     preview.src = e.target.result;
     preview.classList.remove("hidden");
+
+    // cacher le bouton + le texte
+    labelBtn.style.display = "none";
+    imageInfo.style.display = "none";
+    checkFormValidity();
   };
   reader.readAsDataURL(file);
 });
@@ -120,7 +132,7 @@ async function validateFormModal(e) {
   const title = document.getElementById("title").value.trim();
   const fileInput = document.getElementById("image");
 
-  if (!category || !title) {
+  if (!category || !title || fileInput.files.length === 0) {
     alert("Veuillez remplir tous les champs.");
     return;
   }
@@ -152,6 +164,41 @@ async function validateFormModal(e) {
   const result = await response.json();
   console.log(result);
 }
+
+function checkFormValidity() {
+  const title = document.getElementById("title").value.trim();
+  const category = document.getElementById("category").value;
+  const fileInput = document.getElementById("image");
+  const validateBtn = document.getElementById("modalBtn");
+
+  const file = fileInput.files[0];
+
+  // Vérification extension via le nom du fichier
+  let validExtension = false;
+  if (file) {
+    const fileName = file.name.toLowerCase();
+    validExtension =
+      fileName.endsWith(".jpg") ||
+      fileName.endsWith(".jpeg") ||
+      fileName.endsWith(".png");
+  }
+
+  const isValid = title.length > 0 && category !== "" && file && validExtension;
+
+  if (isValid) {
+    validateBtn.classList.add("valid");
+    validateBtn.disabled = false;
+  } else {
+    validateBtn.classList.remove("valid");
+    validateBtn.disabled = true;
+  }
+}
+
+document.getElementById("title").addEventListener("input", checkFormValidity);
+document
+  .getElementById("category")
+  .addEventListener("change", checkFormValidity);
+document.getElementById("image").addEventListener("change", checkFormValidity);
 
 async function refreshGallery() {
   const works = await apiWorks();
@@ -333,9 +380,11 @@ function resetModal() {
   preview.src = "./assets/icons/img.png"; // icône par défaut
   preview.classList.remove("hidden");
 
-  // 4. Vider l’input file
+  // 4. Vider l’input file et réafficher img + btn
   const fileInput = document.getElementById("image");
   fileInput.value = "";
+  labelBtn.style.display = "block";
+  imageInfo.style.display = "block";
 }
 
 modalAddBtn.addEventListener("click", () => {
