@@ -1,4 +1,4 @@
-// 1. Récupérer les works / catégorie / delete / Ajout / refresh
+// 1. Récupérer les works
 async function apiWorks() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
@@ -8,6 +8,7 @@ async function apiWorks() {
         `Une erreure est survenue lors de la récupération des travaux. Status: ${response.status}`,
         JSON.stringify(response, null, 2),
       );
+      return [];
     }
 
     return await response.json();
@@ -16,10 +17,11 @@ async function apiWorks() {
       "une erreure est survenue lors de la récupération des travaux ",
       JSON.stringify(error, null, 2),
     );
-    // return []
+    return [];
   }
 }
 
+// 2. Récupérer les catégories
 async function apiCategories() {
   try {
     const response = await fetch("http://localhost:5678/api/categories");
@@ -39,6 +41,7 @@ async function apiCategories() {
   }
 }
 
+// 3. Supprimer un work
 async function deleteWork(id) {
   try {
     const response = await fetch(`http://localhost:5678/api/works/${id}`, {
@@ -49,28 +52,39 @@ async function deleteWork(id) {
     });
 
     if (!response.ok) {
-      throw new Error("Erreur lors de la suppression");
+      throw new Error(
+        `Erreur lors de la suppression (status: ${response.status})`,
+      );
     }
 
     console.log("Projet supprimé");
+    return true;
   } catch (error) {
-    console.error(error);
+    console.error("Erreur deleteWork :", error);
+    return false;
   }
 }
 
-// Charger les catégories
+// 4. Charger les catégories dans le <select>
 async function loadCategories() {
-  const response = await fetch("http://localhost:5678/api/categories");
-  const categories = await response.json();
+  try {
+    const categories = await apiCategories();
+    const select = document.getElementById("category");
 
-  const select = document.getElementById("category");
+    if (!select) {
+      console.error("Impossible de trouver l'élément #category");
+      return;
+    }
 
-  categories.forEach((cat) => {
-    const option = document.createElement("option");
-    option.value = cat.id;
-    option.textContent = cat.name;
-    select.appendChild(option);
-  });
+    categories.forEach((cat) => {
+      const option = document.createElement("option");
+      option.value = cat.id;
+      option.textContent = cat.name;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Erreur lors du chargement des catégories :", error);
+  }
 }
 
 const fileInput = document.getElementById("image");
@@ -207,7 +221,7 @@ async function refreshGallery() {
   displayModalWorks(works);
 }
 
-// 2. Générer la galerie pricipale en dynamique et la galerie dans la modale
+// Générer la galerie pricipale en dynamique et la galerie dans la modale
 function displayWorks(works) {
   const gallery = document.getElementById("galleryDynamic");
   gallery.innerHTML = ""; // Nettoyer avant d'ajouter
@@ -247,7 +261,6 @@ function displayModalWorks(works) {
     deleteBtn.dataset.id = work.id;
 
     deleteBtn.addEventListener("click", async () => {
-      // console.log(deleteBtn.dataset.id);
       await deleteWork(work.id);
       await refreshGallery();
     });
@@ -268,7 +281,7 @@ async function loadModalGallery() {
   displayModalWorks(works);
 }
 
-// 3. gestion des catégories
+// gestion des catégories
 function createFilterBtn(category, works) {
   const btn = document.createElement("button");
   btn.classList.add("filter-btn");
@@ -280,7 +293,7 @@ function createFilterBtn(category, works) {
   return btn;
 }
 
-// 4. Ajout des filtrres
+// Ajout des filtrres
 function setupFilters(works, categories) {
   const filtersContainer = document.getElementById("filters");
 
@@ -310,16 +323,15 @@ function setupFilters(works, categories) {
   });
 }
 
-// 4. Lancer l'affichage
+// Lancer l'affichage
 async function init() {
   const works = await apiWorks();
-  // console.log(works);
   const categories = await apiCategories();
   displayWorks(works);
   setupFilters(works, categories);
 }
 
-// 5. mode admin
+// mode admin
 const token = localStorage.getItem("token");
 
 if (token) {
