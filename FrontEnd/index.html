@@ -124,7 +124,11 @@
                 <!-- <label for="image">Image</label> -->
 
                 <div class="preview-container">
-                  <img id="image-preview" src="./assets/icons/img.png" />
+                  <img
+                    id="image-preview"
+                    alt="Image du projet à ajouter"
+                    src="./assets/icons/img.png"
+                  />
                   <input
                     type="file"
                     id="image"
@@ -132,12 +136,7 @@
                     class="hidden"
                   />
 
-                  <label
-                    type="file"
-                    id="label-btn"
-                    class="modal-btn-add-picture"
-                    for="image"
-                  >
+                  <label id="label-btn" class="modal-btn-add-picture">
                     + Ajouter photo
                   </label>
                   <p id="image-info">jpg. png : 4mo max</p>

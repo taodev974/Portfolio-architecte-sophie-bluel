@@ -30,14 +30,15 @@ async function apiCategories() {
       console.warn(
         `Erreur lors de la récupération des catégories. Status: ${response.status}`,
       );
+      return []; // API répond mais avec une erreur  -> tableau vide
     }
-
-    return await response.json();
+    return await response.json(); // API ok -> données
   } catch (error) {
     console.error(
       "Une erreur est survenue lors de la récupération des catégories",
       error,
     );
+    return []; // API inaccessible -> tableau vide
   }
 }
 
@@ -131,7 +132,7 @@ function onCategoryChange(event) {
 document
   .getElementById("category")
   .addEventListener("change", onCategoryChange);
-// Cahrger les catégories
+// Charger les catégories
 loadCategories();
 
 // Valider le formulaire
@@ -397,6 +398,11 @@ function resetModal() {
   fileInput.value = "";
   labelBtn.style.display = "block";
   imageInfo.style.display = "block";
+
+  // 5. Mettre à jour l'état du bouton valider
+  const validateBtn = document.getElementById("modalBtn");
+  validateBtn.disabled = true;
+  validateBtn.classList.remove("valid");
 }
 
 modalAddBtn.addEventListener("click", () => {
