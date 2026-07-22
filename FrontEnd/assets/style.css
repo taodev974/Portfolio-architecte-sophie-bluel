@@ -394,7 +394,7 @@ footer {
   text-align: center;
   padding: 10px;
   display: none; /* caché par défaut */
-  font-style: 16px;
+  font-size: 16px;
 }
 .hidden {
   display: none;
