@@ -2,7 +2,10 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+/* ----------------------------------------------------------
+   RESET CSS – supprime les styles par défaut des navigateurs
+   Source : Eric Meyer
+----------------------------------------------------------- */
 html,
 body,
 div,
@@ -92,6 +95,8 @@ video {
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
+/* HTML5 elements affichés en block pour compatibilité anciens navigateurs */
+article,
 article,
 aside,
 details,
@@ -113,7 +118,7 @@ main {
 }
 ol,
 ul {
-  list-style: none;
+  list-style: none; /* enlève les puces */
 }
 blockquote,
 q {
@@ -131,6 +136,10 @@ table {
   border-spacing: 0;
 }
 /** end reset css**/
+
+/* ----------------------------------------------------------
+   STYLES GLOBAUX
+----------------------------------------------------------- */
 body {
   max-width: 1140px;
   margin: auto;
@@ -146,6 +155,8 @@ header {
 section {
   margin: 50px 0;
 }
+
+/* Logo + titre */
 h1 a {
   display: flex;
   flex-direction: column;
@@ -159,12 +170,18 @@ h1 a > span {
   font-size: 10px;
   letter-spacing: 0.1em;
 }
+
+/* Titres */
 h2 {
   font-family: "Syne";
   font-weight: 700;
   font-size: 30px;
   color: #1d6154;
 }
+
+/* ----------------------------------------------------------
+   NAVIGATION
+----------------------------------------------------------- */
 nav ul {
   display: flex;
   align-items: center;
@@ -190,6 +207,9 @@ li:visited {
   text-decoration: none;
 }
 
+/* ----------------------------------------------------------
+   SECTION INTRODUCTION
+----------------------------------------------------------- */
 #introduction {
   display: flex;
   align-items: center;
@@ -214,6 +234,11 @@ li:visited {
   margin-bottom: 0.5em;
   /* margin-right: 10em; */
 }
+
+/* ----------------------------------------------------------
+   PORTFOLIO + GALLERIE
+----------------------------------------------------------- */
+/* Section portfolio utilisation de flex,grid */
 #portfolio {
   display: flex;
   flex-direction: column;
@@ -224,6 +249,8 @@ li:visited {
   text-align: center;
   margin-bottom: 1em;
 }
+
+/* Grille de la galerie statique */
 .gallery {
   width: 100%;
   display: grid;
@@ -236,6 +263,7 @@ li:visited {
   width: 100%;
 }
 
+/* Galerie dynamique (JS) */
 #galleryDynamic {
   width: 100%;
   display: grid;
@@ -243,11 +271,13 @@ li:visited {
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 }
-
 #galleryDynamic img {
   width: 100%;
 }
 
+/* ----------------------------------------------------------
+   FILTRES
+----------------------------------------------------------- */
 #filters {
   display: flex;
   flex-direction: row;
@@ -255,7 +285,6 @@ li:visited {
   gap: 1em;
   margin: 2em;
 }
-
 #filters button {
   border-radius: 60px;
   padding: 0.5em 2em;
@@ -266,11 +295,9 @@ li:visited {
   font-family: "syne";
   color: #1d6154;
 }
-
 #filters button:hover {
   background-color: rgba(29, 97, 84, 0.1);
 }
-
 #filters button.active {
   background-color: #1d6154;
   color: white;
@@ -278,6 +305,9 @@ li:visited {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* ----------------------------------------------------------
+   FORMULAIRE DE CONTACT
+----------------------------------------------------------- */
 #contact {
   width: 50%;
   margin: auto;
@@ -329,6 +359,10 @@ input[type="submit"] {
   text-align: center;
   border-radius: 60px;
 }
+
+/* ----------------------------------------------------------
+   FOOTER
+----------------------------------------------------------- */
 footer nav ul {
   display: flex;
   justify-content: flex-end;
@@ -344,8 +378,10 @@ footer {
   width: 100%;
   padding: 1em;
 }
-/* Page connexion */
 
+/* ----------------------------------------------------------
+   PAGE CONNEXION
+----------------------------------------------------------- */
 #connexion {
   display: flex;
   justify-content: center;
@@ -387,20 +423,22 @@ footer {
   text-decoration: underline;
 }
 
-/* homepage_edit */
+/* ----------------------------------------------------------
+   MODE ADMIN
+----------------------------------------------------------- */
 .admin-banner {
   background: black;
   color: white;
   text-align: center;
   padding: 10px;
-  display: none; /* caché par défaut */
+  display: none; /* affiché uniquement si admin */
   font-size: 16px;
 }
 .hidden {
   display: none;
 }
 .edit-button {
-  display: none; /* caché par défaut */
+  display: none; /* bouton d’édition visible si admin */
   cursor: pointer;
   font-size: 14px;
 }
@@ -411,7 +449,9 @@ footer {
   align-items: baseline;
 }
 
-/* modale */
+/* ----------------------------------------------------------
+   MODALE
+----------------------------------------------------------- */
 .modal {
   position: fixed;
   top: 0;
@@ -419,7 +459,7 @@ footer {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  display: none;
+  display: none; /* affichée via JS */
   justify-content: center;
   align-items: center;
 }
@@ -450,6 +490,7 @@ footer {
   top: 10px;
 }
 
+/* Galerie interne de la modale */
 .modal-gallery {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -474,6 +515,7 @@ footer {
   text-align: center;
 }
 
+/* Boutons modale */
 .modal-btn {
   border-radius: 60px;
   padding: 0.5em 2em;
@@ -500,6 +542,7 @@ footer {
   cursor: pointer;
 }
 
+/* Bouton supprimer image */
 .delete-btn {
   position: absolute;
   top: 5px;
@@ -521,6 +564,7 @@ footer {
   font-size: 26px;
 }
 
+/* Formulaire ajout image */
 .preview-container {
   width: 100%;
   /* height: 100px; */

@@ -1,4 +1,8 @@
-// 1. Récupérer les works
+// =======================================================
+// 1. récupération des données
+// =======================================================
+
+// Récupérer les works
 async function apiWorks() {
   try {
     const response = await fetch("http://localhost:5678/api/works");
@@ -21,7 +25,7 @@ async function apiWorks() {
   }
 }
 
-// 2. Récupérer les catégories
+// Récupérer les catégories
 async function apiCategories() {
   try {
     const response = await fetch("http://localhost:5678/api/categories");
@@ -42,185 +46,9 @@ async function apiCategories() {
   }
 }
 
-// 3. Supprimer un work
-async function deleteWork(id) {
-  try {
-    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Erreur lors de la suppression (status: ${response.status})`,
-      );
-    }
-
-    console.log("Projet supprimé");
-    return true;
-  } catch (error) {
-    console.error("Erreur deleteWork :", error);
-    return false;
-  }
-}
-
-// 4. Charger les catégories dans le <select>
-async function loadCategories() {
-  try {
-    const categories = await apiCategories();
-    const select = document.getElementById("category");
-
-    if (!select) {
-      console.error("Impossible de trouver l'élément #category");
-      return;
-    }
-
-    categories.forEach((cat) => {
-      const option = document.createElement("option");
-      option.value = cat.id;
-      option.textContent = cat.name;
-      select.appendChild(option);
-    });
-  } catch (error) {
-    console.error("Erreur lors du chargement des catégories :", error);
-  }
-}
-
-const fileInput = document.getElementById("image");
-const preview = document.getElementById("image-preview");
-const labelBtn = document.getElementById("label-btn");
-const imageInfo = document.getElementById("image-info");
-
-// Ouvrir le sélecteur de fichier en cliquant sur l'image
-preview.addEventListener("click", () => {
-  fileInput.click();
-});
-// Ouvrir le selecteur de fichier en cliquant sur label
-labelBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-
-// mettre à jour l'image quand un fichier est choisi
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-
-  if (!file) {
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    preview.src = e.target.result;
-    preview.classList.remove("hidden");
-
-    // cacher le bouton + le texte
-    labelBtn.style.display = "none";
-    imageInfo.style.display = "none";
-    checkFormValidity();
-  };
-  reader.readAsDataURL(file);
-});
-
-// Fonction déclenchée quand on change la catégorie
-function onCategoryChange(event) {
-  const selectedId = event.target.value;
-  console.log("Catégorie choisie :", selectedId);
-}
-// Ecouter le changement
-document
-  .getElementById("category")
-  .addEventListener("change", onCategoryChange);
-// Charger les catégories
-loadCategories();
-
-// Valider le formulaire
-document
-  .getElementById("modal-form")
-  .addEventListener("submit", validateFormModal);
-
-async function validateFormModal(e) {
-  e.preventDefault();
-
-  const category = document.getElementById("category").value;
-  const title = document.getElementById("title").value.trim();
-  const fileInput = document.getElementById("image");
-
-  if (!category || !title || fileInput.files.length === 0) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
-  // construction du FormData
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("category", category);
-  formData.append("image", fileInput.files[0]);
-
-  // Envoi à l'API
-  const response = await fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (response.ok) {
-    alert("Projet ajouté !");
-    // fermeture modale
-    modal.style.display = "none";
-    resetModal();
-    // rafraîchir
-    refreshGallery();
-  } else {
-    alert("Erreur lors de l'ajout.");
-  }
-  const result = await response.json();
-  console.log(result);
-}
-
-function checkFormValidity() {
-  const title = document.getElementById("title").value.trim();
-  const category = document.getElementById("category").value;
-  const fileInput = document.getElementById("image");
-  const validateBtn = document.getElementById("modalBtn");
-
-  const file = fileInput.files[0];
-
-  // Vérification extension via le nom du fichier
-  let validExtension = false;
-  if (file) {
-    const fileName = file.name.toLowerCase();
-    validExtension =
-      fileName.endsWith(".jpg") ||
-      fileName.endsWith(".jpeg") ||
-      fileName.endsWith(".png");
-  }
-
-  const isValid = title.length > 0 && category !== "" && file && validExtension;
-
-  if (isValid) {
-    validateBtn.classList.add("valid");
-    validateBtn.disabled = false;
-  } else {
-    validateBtn.classList.remove("valid");
-    validateBtn.disabled = true;
-  }
-}
-
-document.getElementById("title").addEventListener("input", checkFormValidity);
-document
-  .getElementById("category")
-  .addEventListener("change", checkFormValidity);
-document.getElementById("image").addEventListener("change", checkFormValidity);
-
-async function refreshGallery() {
-  const works = await apiWorks();
-
-  displayWorks(works);
-  displayModalWorks(works);
-}
+// =======================================================
+// 2. affichage
+// =======================================================
 
 // Générer la galerie pricipale en dynamique et la galerie dans la modale
 function displayWorks(works) {
@@ -277,22 +105,23 @@ function displayModalWorks(works) {
     gallery.appendChild(figure);
   });
 }
+
+// Actualisation galleries
+async function refreshGallery() {
+  const works = await apiWorks();
+  displayWorks(works);
+  displayModalWorks(works);
+}
+
+// Charger la gallerie de la modale
 async function loadModalGallery() {
   const works = await apiWorks();
   displayModalWorks(works);
 }
 
-// gestion des catégories
-function createFilterBtn(category, works) {
-  const btn = document.createElement("button");
-  btn.classList.add("filter-btn");
-  btn.textContent = category.name;
-  btn.addEventListener("click", () => {
-    const filtered = works.filter((w) => w.categoryId === category.id);
-    displayWorks(filtered);
-  });
-  return btn;
-}
+// =======================================================
+// 3. filtres
+// =======================================================
 
 // Ajout des filtrres
 function setupFilters(works, categories) {
@@ -324,15 +153,23 @@ function setupFilters(works, categories) {
   });
 }
 
-// Lancer l'affichage
-async function init() {
-  const works = await apiWorks();
-  const categories = await apiCategories();
-  displayWorks(works);
-  setupFilters(works, categories);
+// gestion des catégories
+function createFilterBtn(category, works) {
+  const btn = document.createElement("button");
+  btn.classList.add("filter-btn");
+  btn.textContent = category.name;
+  btn.addEventListener("click", () => {
+    const filtered = works.filter((w) => w.categoryId === category.id);
+    displayWorks(filtered);
+  });
+  return btn;
 }
 
+// =======================================================
+// 4. authentification
+// =======================================================
 // mode admin
+
 const token = localStorage.getItem("token");
 
 if (token) {
@@ -350,6 +187,10 @@ if (token) {
   document.getElementById("edit-gallery").style.display = "inline-block";
   document.getElementById("filters").style.display = "none";
 }
+
+// =======================================================
+// 5. Modale
+// =======================================================
 
 const modal = document.getElementById("modal");
 const modalClose = document.getElementById("modal-close");
@@ -414,5 +255,222 @@ modalBack.addEventListener("click", () => {
   modalFormView.classList.add("hidden");
   modalGalleryView.classList.remove("hidden");
 });
+
+// =======================================================
+// 6. Supprimer un work
+// =======================================================
+async function deleteWork(id) {
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Erreur lors de la suppression (status: ${response.status})`,
+      );
+    }
+
+    console.log("Projet supprimé");
+    return true;
+  } catch (error) {
+    console.error("Erreur deleteWork :", error);
+    return false;
+  }
+}
+
+// =======================================================
+// 7. Ajout Projet
+// =======================================================
+// Valider le formulaire
+// Écoute l'événement "submit" du formulaire.
+// Lorsque l'utilisateur clique sur "Valider",
+// la fonction validateFormModal() est exécutée.
+
+const fileInput = document.getElementById("image");
+const preview = document.getElementById("image-preview");
+const labelBtn = document.getElementById("label-btn");
+const imageInfo = document.getElementById("image-info");
+
+// Ouvrir le sélecteur de fichier en cliquant sur l'image
+preview.addEventListener("click", () => {
+  fileInput.click();
+});
+// Ouvrir le selecteur de fichier en cliquant sur label
+labelBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+// mettre à jour l'image quand un fichier est choisi
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    preview.src = e.target.result;
+    preview.classList.remove("hidden");
+
+    // cacher le bouton + le texte
+    labelBtn.style.display = "none";
+    imageInfo.style.display = "none";
+    checkFormValidity();
+  };
+  reader.readAsDataURL(file);
+});
+
+// Charger les catégories dans le <select>
+async function loadCategories() {
+  try {
+    const categories = await apiCategories();
+    const select = document.getElementById("category");
+
+    if (!select) {
+      console.error("Impossible de trouver l'élément #category");
+      return;
+    }
+
+    categories.forEach((cat) => {
+      const option = document.createElement("option");
+      option.value = cat.id;
+      option.textContent = cat.name;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Erreur lors du chargement des catégories :", error);
+  }
+}
+
+// Fonction déclenchée quand on change la catégorie
+function onCategoryChange(event) {
+  const selectedId = event.target.value;
+  console.log("Catégorie choisie :", selectedId);
+}
+// Ecouter le changement
+document
+  .getElementById("category")
+  .addEventListener("change", onCategoryChange);
+// Charger les catégories
+loadCategories();
+
+document
+  .getElementById("modal-form")
+  .addEventListener("submit", validateFormModal);
+
+async function validateFormModal(e) {
+  // Empêche le rechargement automatique de la page
+  // lors de l'envoi du formulaire.
+  e.preventDefault();
+
+  // Récupération des valeurs saisies par l'utilisateur.
+  const category = document.getElementById("category").value;
+  const title = document.getElementById("title").value.trim();
+  const fileInput = document.getElementById("image");
+
+  // Vérification que tous les champs obligatoires sont remplis.
+  // Si un champ est vide, on arrête immédiatement la fonction.
+  if (!category || !title || fileInput.files.length === 0) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  // Création d'un objet FormData.
+  // Il permet d'envoyer simultanément :
+  // - des données texte (titre, catégorie)
+  // - un fichier image
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("category", category);
+  formData.append("image", fileInput.files[0]);
+
+  // Envoi des données vers l'API
+  // grâce à une requête HTTP POST.
+  const response = await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+
+    // Le token JWT est envoyé dans l'en-tête HTTP
+    // afin que le serveur vérifie les droits
+    // de l'utilisateur connecté.
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+
+    // Le corps de la requête contient le FormData.
+    // Il n'est pas nécessaire de préciser
+    // le Content-Type : le navigateur le fait automatiquement.
+    body: formData,
+  });
+
+  // Si l'ajout est accepté par le serveur
+  if (response.ok) {
+    alert("Projet ajouté !");
+
+    // fermeture modale
+    modal.style.display = "none";
+
+    // Remise à zéro complète de la modale
+    resetModal();
+
+    // Mise à jour immédiate des deux galeries
+    // sans recharger toute la page.
+    refreshGallery();
+  } else {
+    alert("Erreur lors de l'ajout.");
+  }
+
+  // Affiche dans la console la réponse du serveur
+  // (utile pendant le développement).
+  const result = await response.json();
+  console.log(result);
+}
+
+function checkFormValidity() {
+  const title = document.getElementById("title").value.trim();
+  const category = document.getElementById("category").value;
+  const fileInput = document.getElementById("image");
+  const validateBtn = document.getElementById("modalBtn");
+
+  const file = fileInput.files[0];
+
+  // Vérification extension via le nom du fichier
+  let validExtension = false;
+  if (file) {
+    const fileName = file.name.toLowerCase();
+    validExtension =
+      fileName.endsWith(".jpg") ||
+      fileName.endsWith(".jpeg") ||
+      fileName.endsWith(".png");
+  }
+
+  const isValid = title.length > 0 && category !== "" && file && validExtension;
+
+  if (isValid) {
+    validateBtn.classList.add("valid");
+    validateBtn.disabled = false;
+  } else {
+    validateBtn.classList.remove("valid");
+    validateBtn.disabled = true;
+  }
+}
+
+document.getElementById("title").addEventListener("input", checkFormValidity);
+document
+  .getElementById("category")
+  .addEventListener("change", checkFormValidity);
+document.getElementById("image").addEventListener("change", checkFormValidity);
+
+// 8. Lancer l'affichage
+async function init() {
+  const works = await apiWorks();
+  const categories = await apiCategories();
+  displayWorks(works);
+  setupFilters(works, categories);
+}
 
 window.addEventListener("DOMContentLoaded", init);
