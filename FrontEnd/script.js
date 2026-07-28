@@ -419,7 +419,7 @@ async function validateFormModal(e) {
 
     // Mise à jour immédiate des deux galeries
     // sans recharger toute la page.
-    refreshGallery();
+    await refreshGallery();
   } else {
     alert("Erreur lors de l'ajout.");
   }
@@ -465,7 +465,10 @@ document
   .addEventListener("change", checkFormValidity);
 document.getElementById("image").addEventListener("change", checkFormValidity);
 
+// =========================================
 // 8. Lancer l'affichage
+// =========================================
+
 async function init() {
   const works = await apiWorks();
   const categories = await apiCategories();
