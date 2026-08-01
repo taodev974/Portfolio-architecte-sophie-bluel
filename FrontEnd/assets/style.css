@@ -614,8 +614,8 @@ select {
   cursor: pointer;
 }
 
-/* ----------------- Modale de connexion ------------------ */
-#modal-conect {
+/* ----------------- Modale de message ------------------ */
+#modal-msg {
   position: fixed;
   top: 0;
   left: 0;
@@ -627,11 +627,11 @@ select {
   align-items: center;
 }
 
-#modal-conect.hidden {
+#modal-msg.hidden {
   display: none;
 }
 
-#modal-conect .content {
+#modal-msg .content {
   background: white;
   padding: 20px;
   border-radius: 10px;
@@ -646,4 +646,5 @@ select {
 .btn-modal-conect {
   width: fit-content;
   align-self: center;
+  border-radius: 4px;
 }

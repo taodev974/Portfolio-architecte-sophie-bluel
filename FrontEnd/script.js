@@ -1,3 +1,6 @@
+// Chemin API
+const apiUrl = "http://localhost:5678/api/";
+
 // =======================================================
 // 1. récupération des données
 // =======================================================
@@ -5,7 +8,7 @@
 // Récupérer les works
 async function apiWorks() {
   try {
-    const response = await fetch("http://localhost:5678/api/works");
+    const response = await fetch(`${apiUrl}works`);
 
     if (!response.ok) {
       console.warn(
@@ -28,10 +31,10 @@ async function apiWorks() {
 // Récupérer les catégories
 async function apiCategories() {
   try {
-    const response = await fetch("http://localhost:5678/api/categories");
+    const response = await fetch(`${apiUrl}categories`);
 
     if (!response.ok) {
-      console.warn(
+      showModal(
         `Erreur lors de la récupération des catégories. Status: ${response.status}`,
       );
       return []; // API répond mais avec une erreur  -> tableau vide
@@ -204,12 +207,14 @@ const modalFormView = document.getElementById("modal-form-view");
 document.getElementById("edit-gallery").addEventListener("click", () => {
   resetModal();
   modal.style.display = "flex";
+  modal.setAttribute("aria-hidden", "false");
   loadModalGallery(); // On charge les travaux dans la modale
 });
 
 // Fermer la modale
 modalClose.addEventListener("click", () => {
   modal.style.display = "none";
+  modal.setAttribute("aria-hidden", "true");
   resetModal();
 });
 
@@ -256,12 +261,22 @@ modalBack.addEventListener("click", () => {
   modalGalleryView.classList.remove("hidden");
 });
 
+// Modale message
+function showModal(message) {
+  document.getElementById("modal-text").textContent = message;
+  document.getElementById("modal-msg").classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("modal-msg").classList.add("hidden");
+}
+
 // =======================================================
 // 6. Supprimer un work
 // =======================================================
 async function deleteWork(id) {
   try {
-    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+    const response = await fetch(`${apiUrl}works/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -273,8 +288,7 @@ async function deleteWork(id) {
         `Erreur lors de la suppression (status: ${response.status})`,
       );
     }
-
-    console.log("Projet supprimé");
+    showModal("Projet supprimé");
     return true;
   } catch (error) {
     console.error("Erreur deleteWork :", error);
@@ -376,7 +390,7 @@ async function validateFormModal(e) {
   // Vérification que tous les champs obligatoires sont remplis.
   // Si un champ est vide, on arrête immédiatement la fonction.
   if (!category || !title || fileInput.files.length === 0) {
-    alert("Veuillez remplir tous les champs.");
+    showModal("Veuillez remplir tous les champs.");
     return;
   }
 
@@ -391,7 +405,7 @@ async function validateFormModal(e) {
 
   // Envoi des données vers l'API
   // grâce à une requête HTTP POST.
-  const response = await fetch("http://localhost:5678/api/works", {
+  const response = await fetch(`${apiUrl}works`, {
     method: "POST",
 
     // Le token JWT est envoyé dans l'en-tête HTTP
@@ -409,7 +423,7 @@ async function validateFormModal(e) {
 
   // Si l'ajout est accepté par le serveur
   if (response.ok) {
-    alert("Projet ajouté !");
+    showModal("Projet ajouté");
 
     // fermeture modale
     modal.style.display = "none";
@@ -421,7 +435,7 @@ async function validateFormModal(e) {
     // sans recharger toute la page.
     await refreshGallery();
   } else {
-    alert("Erreur lors de l'ajout.");
+    showModal("Erreur lors de l'ajout.");
   }
 
   // Affiche dans la console la réponse du serveur

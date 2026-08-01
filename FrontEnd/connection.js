@@ -1,3 +1,6 @@
+// Chemin
+const apiUrl = "http://localhost:5678/api/";
+
 async function apiUsersLogin(email, password) {
   // Ctrl avant l'appel API
   if (!email.trim() || !password.trim()) {
@@ -7,7 +10,7 @@ async function apiUsersLogin(email, password) {
     return null;
   }
   try {
-    const response = await fetch("http://localhost:5678/api/users/login", {
+    const response = await fetch(`${apiUrl}users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,12 +21,7 @@ async function apiUsersLogin(email, password) {
     console.log("STATUS =", response.status);
 
     if (!response.ok) {
-      // console.warn(
-      //   `Identifiant incorrecte ou erreur serveur, Status: ${response.status}`,
-      // );
-      showModal(
-        "Identifiants incorrecte! Veuillez entrer un email et mot de passe valide pour vous connectez!",
-      );
+      showModal("Identifiant ou mot de pass incorrect !");
       return null;
     }
 
@@ -55,12 +53,12 @@ loginBtn.addEventListener("click", async (e) => {
   window.location.href = "index.html";
 });
 
-// Modale de connexion
+// Modale message
 function showModal(message) {
   document.getElementById("modal-text").textContent = message;
-  document.getElementById("modal-conect").classList.remove("hidden");
+  document.getElementById("modal-msg").classList.remove("hidden");
 }
 
 function closeModal() {
-  document.getElementById("modal-conect").classList.add("hidden");
+  document.getElementById("modal-msg").classList.add("hidden");
 }
