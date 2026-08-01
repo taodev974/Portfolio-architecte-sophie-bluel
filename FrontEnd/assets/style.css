@@ -643,7 +643,7 @@ select {
   gap: 1em;
   flex-direction: column;
 }
-.btn-modal-conect {
+.btn-modal-msg {
   width: fit-content;
   align-self: center;
   border-radius: 4px;

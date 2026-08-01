@@ -1,5 +1,5 @@
 // Chemin API
-const apiUrl = "http://localhost:5678/api/";
+const API_URL = "http://localhost:5678/api";
 
 // =======================================================
 // 1. récupération des données
@@ -8,7 +8,7 @@ const apiUrl = "http://localhost:5678/api/";
 // Récupérer les works
 async function apiWorks() {
   try {
-    const response = await fetch(`${apiUrl}works`);
+    const response = await fetch(`${API_URL}/works`);
 
     if (!response.ok) {
       console.warn(
@@ -31,7 +31,7 @@ async function apiWorks() {
 // Récupérer les catégories
 async function apiCategories() {
   try {
-    const response = await fetch(`${apiUrl}categories`);
+    const response = await fetch(`${API_URL}/categories`);
 
     if (!response.ok) {
       showModal(
@@ -271,12 +271,16 @@ function closeModal() {
   document.getElementById("modal-msg").classList.add("hidden");
 }
 
+document
+  .getElementById("close-modal-msg")
+  .addEventListener("click", closeModal);
+
 // =======================================================
 // 6. Supprimer un work
 // =======================================================
 async function deleteWork(id) {
   try {
-    const response = await fetch(`${apiUrl}works/${id}`, {
+    const response = await fetch(`${API_URL}/works/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -405,7 +409,7 @@ async function validateFormModal(e) {
 
   // Envoi des données vers l'API
   // grâce à une requête HTTP POST.
-  const response = await fetch(`${apiUrl}works`, {
+  const response = await fetch(`${API_URL}/works`, {
     method: "POST",
 
     // Le token JWT est envoyé dans l'en-tête HTTP
@@ -456,13 +460,18 @@ function checkFormValidity() {
   let validExtension = false;
   if (file) {
     const fileName = file.name.toLowerCase();
-    validExtension =
-      fileName.endsWith(".jpg") ||
-      fileName.endsWith(".jpeg") ||
-      fileName.endsWith(".png");
+    validExtension = fileName.endsWith(".jpg") || fileName.endsWith(".png");
   }
+  // Test taille du fichier
+  let validSize = false;
+  const maxSize = 4;
+  const sizeinMB = file.size / (1024 * 1024);
+  if (sizeinMB <= maxSize) {
+    validSize = true;
+  } else showModal("Fichier trop lourd");
 
-  const isValid = title.length > 0 && category !== "" && file && validExtension;
+  const isValid =
+    title.length > 0 && category !== "" && file && validExtension && validSize;
 
   if (isValid) {
     validateBtn.classList.add("valid");

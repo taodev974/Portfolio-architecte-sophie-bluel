@@ -1,5 +1,5 @@
 // Chemin
-const apiUrl = "http://localhost:5678/api/";
+const API_URL = "http://localhost:5678/api";
 
 async function apiUsersLogin(email, password) {
   // Ctrl avant l'appel API
@@ -10,7 +10,7 @@ async function apiUsersLogin(email, password) {
     return null;
   }
   try {
-    const response = await fetch(`${apiUrl}users/login`, {
+    const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,3 +62,7 @@ function showModal(message) {
 function closeModal() {
   document.getElementById("modal-msg").classList.add("hidden");
 }
+
+document
+  .getElementById("close-modal-msg")
+  .addEventListener("click", closeModal);
