@@ -5,14 +5,16 @@ module.exports = (req, res, next) => {
     const categoryId = parseInt(req.body.category);
     const userId = req.auth.userId;
 
+    const file = req.file;
+
     // Vérrification du fichier
-    if (!File) {
+    if (!file) {
       return res.status(400).json({ error: "Aucun fichier envoyé" });
     }
 
     // Vérrification du type réel du fichier
     const allowedTypes = ["image/jpeg", "image/png"];
-    if (!allowedTypes.includes(File.mimetype)) {
+    if (!allowedTypes.includes(file.mimetype)) {
       return res.status(400).json({ error: "Extension non autorisée" });
     }
 
@@ -33,15 +35,14 @@ module.exports = (req, res, next) => {
       !userId ||
       userId <= 0
     ) {
-      return res.status(400).json({ erro: "Champs invalides ou manquants" });
+      return res.status(400).json({ error: "Champs invalides ou manquants" });
     }
 
     // Tout est OK - on prépare l'objet pour le controller
     req.work = { title, categoryId, userId, imageUrl };
     next();
   } catch (e) {
-    return res
-      .status(500)
-      .json({ error: new Error("Une erreur interne est survenue") });
+    console.error(e);
+    return res.status(500).json({ error: "Une erreur interne est survenue" });
   }
 };

@@ -11,7 +11,7 @@ async function apiWorks() {
     const response = await fetch(`${API_URL}/works`);
 
     if (!response.ok) {
-      console.warn(
+      showModal(
         `Une erreure est survenue lors de la récupération des travaux. Status: ${response.status}`,
         JSON.stringify(response, null, 2),
       );
@@ -222,6 +222,7 @@ modalClose.addEventListener("click", () => {
 modal.addEventListener("click", (e) => {
   if (e.target === modal) {
     modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
     resetModal();
   }
 });
@@ -279,6 +280,13 @@ document
 // 6. Supprimer un work
 // =======================================================
 async function deleteWork(id) {
+  if (!token) {
+    showModal(
+      "Veuillez utiliser le mode administration pour supprimer un projet",
+    );
+    return false;
+  }
+
   try {
     const response = await fetch(`${API_URL}/works/${id}`, {
       method: "DELETE",
@@ -409,6 +417,10 @@ async function validateFormModal(e) {
 
   // Envoi des données vers l'API
   // grâce à une requête HTTP POST.
+  if (!token) {
+    showModal("Veuillez vous connecter en mode administrateur.");
+    return;
+  }
   const response = await fetch(`${API_URL}/works`, {
     method: "POST",
 
@@ -445,7 +457,7 @@ async function validateFormModal(e) {
   // Affiche dans la console la réponse du serveur
   // (utile pendant le développement).
   const result = await response.json();
-  console.log(result);
+  // console.log(result);
 }
 
 function checkFormValidity() {
@@ -458,17 +470,36 @@ function checkFormValidity() {
 
   // Vérification extension via le nom du fichier
   let validExtension = false;
+  let validSize = false;
+
   if (file) {
     const fileName = file.name.toLowerCase();
-    validExtension = fileName.endsWith(".jpg") || fileName.endsWith(".png");
-  }
-  // Test taille du fichier
-  let validSize = false;
-  const maxSize = 4;
-  const sizeinMB = file.size / (1024 * 1024);
-  if (sizeinMB <= maxSize) {
+    validExtension =
+      fileName.endsWith(".jpg") ||
+      fileName.endsWith(".png") ||
+      fileName.endsWith(".jpeg");
+
+    if (!validExtension) {
+      showModal("Seuls les fichiers JPG, JPEG et PNG sont autorisés");
+      fileInput.value = ""; // on vide le champs
+
+      preview.src = "./assets/icons/img.png"; // icone par défaut
+      return;
+    }
+
+    // Test taille du fichier
+    const maxSize = 4;
+
+    const sizeinMB = file.size / (1024 * 1024);
+
+    if (sizeinMB > maxSize) {
+      showModal("Le fichier dépasse la taille de 4Mo.");
+      fileInput.value = "";
+      preview.src = "./assets/icons/img.png";
+      return;
+    }
     validSize = true;
-  } else showModal("Fichier trop lourd");
+  }
 
   const isValid =
     title.length > 0 && category !== "" && file && validExtension && validSize;

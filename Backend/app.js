@@ -29,7 +29,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Gestion des erreurs Multer (Fichier trop lourds, mauvais format, etc)
 app.use((error, req, res, next) => {
-  if (error.name === "MultError") {
+  if (error.name === "MulterError") {
     if (error.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({ error: "Fichier trop lourd (max 4 Mo)" });
     }
