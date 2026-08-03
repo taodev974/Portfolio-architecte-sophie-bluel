@@ -86,9 +86,9 @@
         <p>Vous avez un projet ? Discutons-en !</p>
         <form action="#" method="post">
           <label for="name">Nom</label>
-          <input type="text" name="name" id="name" />
+          <input type="text" name="name" id="name" autocomplete="name" />
           <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" autocomplete="email" />
           <label for="message">Message</label>
           <textarea name="message" id="message" cols="30" rows="10"></textarea>
           <input type="submit" value="Envoyer" />
@@ -137,9 +137,14 @@
                     id="image"
                     accept="image/*"
                     class="hidden"
+                    name="image"
                   />
 
-                  <label id="label-btn" class="modal-btn-add-picture">
+                  <label
+                    id="label-btn"
+                    for="image"
+                    class="modal-btn-add-picture"
+                  >
                     + Ajouter photo
                   </label>
                   <p id="image-info">jpg. png : 4mo max</p>
@@ -166,19 +171,16 @@
         </div>
       </div>
 
-       <!-- ===================== MODALE MSG ===================== -->
+      <!-- ===================== MODALE MSG ===================== -->
       <div id="modal-msg" class="hidden">
         <div class="content">
           <p id="modal-text"></p>
-          <button id="close-modal-msg" class="btn-modal-msg">
-            Fermer
-          </button>
+          <button id="close-modal-msg" class="btn-modal-msg">Fermer</button>
         </div>
       </div>
       <!-- ===================== FIN MODALE MSG ===================== -->
-    </main>
 
-      <!-- ===================== FIN MODALE ===================== -->
+      <!-- ===================== FIN MODALES ===================== -->
     </main>
     <footer>
       <nav>

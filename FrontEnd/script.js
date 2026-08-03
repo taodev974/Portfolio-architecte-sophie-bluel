@@ -402,7 +402,7 @@ async function validateFormModal(e) {
   // Vérification que tous les champs obligatoires sont remplis.
   // Si un champ est vide, on arrête immédiatement la fonction.
   if (!category || !title || fileInput.files.length === 0) {
-    showModal("Veuillez remplir tous les champs.");
+    showModal("Veuillez remplir tous les champs convenablement.");
     return;
   }
 
