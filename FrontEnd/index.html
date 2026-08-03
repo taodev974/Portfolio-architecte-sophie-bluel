@@ -86,9 +86,9 @@
         <p>Vous avez un projet ? Discutons-en !</p>
         <form action="#" method="post">
           <label for="name">Nom</label>
-          <input type="text" name="name" id="name" />
+          <input type="text" name="name" id="name" autocomplete="name" />
           <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" autocomplete="email" />
           <label for="message">Message</label>
           <textarea name="message" id="message" cols="30" rows="10"></textarea>
           <input type="submit" value="Envoyer" />
@@ -135,11 +135,17 @@
                   <input
                     type="file"
                     id="image"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,.jpg,.jpeg,.png"
                     class="hidden"
+                    name="image"
+                    required
                   />
 
-                  <label id="label-btn" class="modal-btn-add-picture">
+                  <label
+                    id="label-btn"
+                    for="image"
+                    class="modal-btn-add-picture"
+                  >
                     + Ajouter photo
                   </label>
                   <p id="image-info">jpg. png : 4mo max</p>
@@ -148,12 +154,16 @@
 
               <div class="form-group">
                 <label for="title">Titre</label>
-                <input type="text" id="title" />
+                <input type="text" id="title" required />
               </div>
 
               <div class="form-group">
                 <label for="category">Catégorie</label>
-                <select id="category"></select>
+                <select id="category" required>
+                  <option value="" selected disabled>
+                    Choisir une catégorie
+                  </option>
+                </select>
               </div>
               <br />
               <hr />
@@ -166,19 +176,16 @@
         </div>
       </div>
 
-       <!-- ===================== MODALE MSG ===================== -->
+      <!-- ===================== MODALE MSG ===================== -->
       <div id="modal-msg" class="hidden">
         <div class="content">
           <p id="modal-text"></p>
-          <button id="close-modal-msg" class="btn-modal-msg">
-            Fermer
-          </button>
+          <button id="close-modal-msg" class="btn-modal-msg">Fermer</button>
         </div>
       </div>
       <!-- ===================== FIN MODALE MSG ===================== -->
-    </main>
 
-      <!-- ===================== FIN MODALE ===================== -->
+      <!-- ===================== FIN MODALES ===================== -->
     </main>
     <footer>
       <nav>

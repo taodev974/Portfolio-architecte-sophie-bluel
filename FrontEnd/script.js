@@ -395,16 +395,21 @@ async function validateFormModal(e) {
   e.preventDefault();
 
   // Récupération des valeurs saisies par l'utilisateur.
-  const category = document.getElementById("category").value;
-  const title = document.getElementById("title").value.trim();
+  const categoryInput = document.getElementById("category");
+  const titleInput = document.getElementById("title");
   const fileInput = document.getElementById("image");
 
-  // Vérification que tous les champs obligatoires sont remplis.
-  // Si un champ est vide, on arrête immédiatement la fonction.
-  if (!category || !title || fileInput.files.length === 0) {
-    showModal("Veuillez remplir tous les champs.");
-    return;
+  // Vérification que tous les champs obligatoires sont remplis,
+  // via la validation native du navigateur (required).
+  for (const input of [titleInput, categoryInput, fileInput]) {
+    if (!input.checkValidity()) {
+      input.reportValidity();
+      return;
+    }
   }
+
+  const category = categoryInput.value;
+  const title = titleInput.value.trim();
 
   // Création d'un objet FormData.
   // Il permet d'envoyer simultanément :
