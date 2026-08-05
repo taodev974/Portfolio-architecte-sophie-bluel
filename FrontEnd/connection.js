@@ -37,8 +37,21 @@ const loginBtn = document.getElementById("login-btn");
 loginBtn.addEventListener("click", async (e) => {
   e.preventDefault(); // empêche le submit classique
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+
+  if (!emailInput.checkValidity()) {
+    emailInput.reportValidity();
+    return;
+  }
+
+  if (!passwordInput.checkValidity()) {
+    passwordInput.reportValidity();
+    return;
+  }
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
   const data = await apiUsersLogin(email, password);
 
